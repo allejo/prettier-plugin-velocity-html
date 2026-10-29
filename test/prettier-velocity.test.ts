@@ -192,7 +192,7 @@ describe("prettier-velocity", () => {
       const [template, expectedOutput, options] =
         readTestcaseFile(testCasePath);
 
-      const formattedTemplate = formatVelocity(template, options);
+      const formattedTemplate = await formatVelocity(template, options);
 
       if (options.compareScreenshots) {
         const numberOfMismatchedPixels = compareScreenshots(
@@ -209,7 +209,7 @@ describe("prettier-velocity", () => {
           `${testCaseName}_diff`
         );
         // Comparing strings prints a very good diff.
-        expect(formatVelocity(template, options)).to.equal(
+        expect(await formatVelocity(template, options)).to.equal(
           expectedOutput,
           `Expected does not match actual. Rendered output is equal to prettier? ${
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

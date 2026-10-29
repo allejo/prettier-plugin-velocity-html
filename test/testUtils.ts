@@ -25,7 +25,7 @@ export const sleep = async (timeInMs: number): Promise<void> => {
   });
 };
 
-export const formatHtml = (input: string): string => {
+export const formatHtml = async (input: string): Promise<string> => {
   return format(input, {
     parser: "html",
   });
@@ -34,11 +34,11 @@ export const formatHtml = (input: string): string => {
 export const formatVelocity = (
   input: string,
   options: PrettierOptions | undefined
-): string => {
+): Promise<string> => {
   return format(input, {
     parser: "velocity-html",
     // pluginSearchDirs: ["./dir-with-plugins"],
-    plugins: [`${__dirname}/..`],
+    plugins: [`${__dirname}/../index.js`],
     ...options,
   });
 };

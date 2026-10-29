@@ -13,7 +13,13 @@ app.get('/lib/:file', function (req, res) {
   if (req.params.file === "parser-velocity-html.js") {
     res.sendFile(path.join(__dirname, 'standalone.js'))
   } else {
-    res.sendFile(path.join(__dirname, 'node_modules', 'prettier', req.params.file));
+    const parserFiles = {
+      "parser-babel.js": "plugins/babel.js",
+      "parser-postcss.js": "plugins/postcss.js",
+      "parser-estree.js": "plugins/estree.js",
+    };
+    const file = parserFiles[req.params.file] || req.params.file;
+    res.sendFile(path.join(__dirname, 'node_modules', 'prettier', file));
   }
 })
 

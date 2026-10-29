@@ -3,7 +3,11 @@
 // This is the library entry point
 
 import { Plugin } from "prettier";
-import { HtmlTagNode } from "./parser/VelocityParserNodes";
+import {
+  HtmlTagNode,
+  NodeWithChildren,
+  ParserNode,
+} from "./parser/VelocityParserNodes";
 import parseVelocityHtml from "./parser/parser";
 import { preprocess } from "./preprocess";
 import { embed } from "./embed";
@@ -28,6 +32,12 @@ const plugin: Plugin = {
       print: printer,
       embed,
       preprocess,
+      getVisitorKeys: (node: ParserNode): string[] => {
+        if (node instanceof HtmlTagNode) {
+          return ["attributes", "children"];
+        }
+        return node instanceof NodeWithChildren ? ["children"] : [];
+      },
     } as any,
   },
   languages: [

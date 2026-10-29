@@ -28,7 +28,7 @@ const prettierWithDebug = prettier as PrettierWithDebug;
 
 interface PrettierWithDebug {
   __debug: PrettierDebug;
-  format: (input: string, options: prettier.Options) => string;
+  format: (input: string, options: prettier.Options) => Promise<string>;
 }
 
 interface PrettierDebug {
@@ -50,7 +50,7 @@ function main(): void {
     .option("--ast", "display AST")
     .option("--doc", "display Doc[]")
     .option("--format", "format input")
-    .action((options: ReadTestCaseOpts) => {
+    .action(async (options: ReadTestCaseOpts) => {
       let input = null;
 
       if (options.file != null) {
@@ -86,7 +86,7 @@ function main(): void {
       const prettierOptions: prettier.Options = {
         parser: "velocity-html",
         // pluginSearchDirs: ["./dir-with-plugins"],
-        plugins: ["./dist/src"],
+        plugins: ["./dist/index.js"],
         printWidth: 80,
       };
 
@@ -104,7 +104,7 @@ function main(): void {
       }
 
       if (options.format) {
-        const formatted = prettier.format(input, prettierOptions);
+        const formatted = await prettier.format(input, prettierOptions);
         if (options.output != null) {
           fs.writeFileSync(options.output, formatted);
         }

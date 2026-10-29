@@ -1,4 +1,3 @@
-import { format } from "prettier";
 import { expect } from "chai";
 import * as fs from "fs";
 import { Browser, chromium, Page } from "playwright";
@@ -16,13 +15,6 @@ import {
 describe("prettier", () => {
   let browser: Browser;
   let page: Page;
-  ([] as [string, string][]).forEach(([input, expectedOutput]) => {
-    it(`should format ${input}`, () => {
-      const formatted = format(input);
-      expect(formatted).to.equal(expectedOutput);
-    });
-  });
-
   before(async () => {
     prepareScreenshotFolder();
     browser = await chromium.launch({
@@ -63,7 +55,7 @@ describe("prettier", () => {
   });
 
   fs.readdirSync(__dirname + "/parser/invalid_html").forEach((testCaseName) => {
-    it(`should not process ${testCaseName}`, () => {
+    it(`should not process ${testCaseName}`, async () => {
       const [input, expectedOutput, options] = readTestcaseFile(
         __dirname + "/parser/invalid_html/" + testCaseName
       );
@@ -71,7 +63,7 @@ describe("prettier", () => {
       let hasError = false;
 
       try {
-        formatVelocity(input, options);
+        await formatVelocity(input, options);
       } catch (e: unknown) {
         hasError = true;
         if (e instanceof Error) {
@@ -93,9 +85,9 @@ describe("prettier", () => {
       const [input, expectedOutput, options] = readTestcaseFile(
         __dirname + "/parser/valid_html/" + testCaseName
       );
-      const formatted = formatVelocity(input, options);
+      const formatted = await formatVelocity(input, options);
 
-      const prettierFormatted = formatHtml(input);
+      const prettierFormatted = await formatHtml(input);
 
       const numberOfMismatchedPixels = compareScreenshots(
         await takeScreenshot(page, `${testCaseName}_velocity`, formatted),

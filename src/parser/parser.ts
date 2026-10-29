@@ -85,8 +85,6 @@ type LexerMode =
 export default function parse(
   text: string,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  parsers: unknown,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   options: unknown
 ): AST {
   const inputStream = CharStreams.fromString(text);

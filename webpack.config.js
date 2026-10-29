@@ -121,7 +121,13 @@ if (process.env.BUILD_STANDALONE == "true") {
           if (req.params.file === "parser-velocity-html.js") {
             res.sendFile(path.join(__dirname, 'node_modules', 'prettier-plugin-velocity-html', 'standalone.js'))
           } else {
-            res.sendFile(path.join(__dirname, 'node_modules', 'prettier', req.params.file));
+            const parserFiles = {
+              "parser-babel.js": "plugins/babel.js",
+              "parser-postcss.js": "plugins/postcss.js",
+              "parser-estree.js": "plugins/estree.js",
+            };
+            const file = parserFiles[req.params.file] || req.params.file;
+            res.sendFile(path.join(__dirname, 'node_modules', 'prettier', file));
           }
         })
       }
@@ -149,8 +155,21 @@ if (process.env.BUILD_STANDALONE == "true") {
             from: "website/static/"
           },
           {
-            from: "node_modules/prettier/{standalone,parser-postcss,parser-babel}.js"
-          }
+            from: "node_modules/prettier/standalone.js",
+            to: "node_modules/prettier/standalone.js",
+          },
+          {
+            from: "node_modules/prettier/plugins/postcss.js",
+            to: "node_modules/prettier/parser-postcss.js",
+          },
+          {
+            from: "node_modules/prettier/plugins/babel.js",
+            to: "node_modules/prettier/parser-babel.js",
+          },
+          {
+            from: "node_modules/prettier/plugins/estree.js",
+            to: "node_modules/prettier/parser-estree.js",
+          },
         ],
       })
     ]
