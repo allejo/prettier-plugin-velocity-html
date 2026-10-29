@@ -94,10 +94,10 @@ function decorate(doc: Doc | Doc[], node: DecoratedNode | undefined): Doc {
 
 export function printOpeningTag(
   node: HtmlTagNode,
-  path: AstPath<ParserNode>,
-  print: (path: AstPath) => Doc
+  path: AstPath,
+  print: () => Doc
 ): Doc {
-  const printedAttributes: Doc[] = path.map(print, "attributes");
+  const printedAttributes: Doc[] = path.map(() => print(), "attributes");
   const tagOpenParts: Doc[] = [
     decorateStart(node.startNode),
     `<${node.tagName}`,
@@ -260,14 +260,14 @@ function breakClosingTag(parent: AnyNodeWithChildren): boolean {
  * This is loosely based on https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace
  */
 function printChildren(
-  path: AstPath<ParserNode>,
+  path: AstPath,
   options: ParserOptions,
-  print: (path: AstPath) => Doc
+  print: () => Doc
 ): Doc[] {
   return path.map((childPath) => {
-    const childNode = childPath.getValue();
+    const childNode = childPath.getValue() as ParserNode;
     const parts: Doc[] = [];
-    const childParts = print(childPath);
+    const childParts = print();
 
     const parent = childNode.parent;
     if (parent == null) {
@@ -391,9 +391,9 @@ function printChildren(
 }
 
 export default function print(
-  path: AstPath<ParserNode>,
+  path: AstPath,
   options: ParserOptions,
-  print: (path: AstPath) => Doc
+  print: () => Doc
 ): Doc {
   const node: ParserNode = path.getValue();
 

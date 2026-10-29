@@ -1,5 +1,7 @@
 Prettier plugin that formats HTML containing Velocity code
 
+Requires Node.js 22 or newer and Prettier 3.x.
+
 <br/>
 
 ### Try your Velocity code using the interactive **[Playground](https://prettier-plugin-velocity-html.herokuapp.com/)**
@@ -135,7 +137,7 @@ This is written for Maven
         </execution>
     </executions>
     <configuration>
-        <nodeVersion>v10.18.0</nodeVersion>
+        <nodeVersion>v22.0.0</nodeVersion>
         <installDirectory>${project.basedir}</installDirectory>
     </configuration>
 </plugin>
@@ -162,4 +164,3 @@ There are two render modes for elements: **block** and **inline**. Block element
 ```
 The decision to treat one element one way or the other is made based on the element name. Block and inline refer to the way elements will be laid out in code not how they are rendered in a browser. We will use block elements to improve readability in places where whitespace has no meaning.
 This plugin comes with its own HTML parser. It is tested using all relevant test cases from the Prettier HTML parser. The output will not always be identical to Prettier HTML. I wanted to avoid the excessive complexity in Prettier's codebase and simplified some cases.
-
